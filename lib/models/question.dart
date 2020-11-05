@@ -1,17 +1,24 @@
 class Question {
   final String question;
   final String correctAnswer;
-  final List<String> incorrectAnswers;
+  final List<dynamic> incorrectAnswers;
+  final List<dynamic> options;
   final String category;
 
-  Question({this.question, this.correctAnswer, this.incorrectAnswers, this.category});
+  Question({this.question, this.correctAnswer, this.incorrectAnswers, this.category,
+    this.options});
 
   factory Question.fromJson(Map<String, dynamic> json){
-
+    List<dynamic> options = List<dynamic>();
+    for (var i=0 ;i < json["incorrect_answers"].length; i++ ){
+      options.add(json["incorrect_answers"][i]);
+    }
+    options.add(json["correct_answer"]);
+    options.shuffle();
     return Question(
       question:json["question"],
       correctAnswer: json["correct_answer"],
-    //  incorrectAnswers: json["incorrect_answers"],
+      options:options,
       category: json["category"]
     );
   }
